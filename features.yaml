@@ -1,0 +1,24 @@
+apiVersion: core.openfeature.dev/v1beta1
+kind: FeatureFlag
+metadata:
+  name: odh-flags
+spec:
+  flagSpec:
+    flags:
+      instructlab_mode:
+        state: "ENABLED"
+        variants:
+          "enabled": true
+          "disabled": false
+        defaultVariant: "enabled"
+        targeting: {}
+---
+apiVersion: core.openfeature.dev/v1beta1
+kind: FeatureFlagSource
+metadata:
+  name: feature-flag-source
+spec:
+  sources:
+  - source: flags/odh-flags
+    provider: kubernetes
+  port: 8080

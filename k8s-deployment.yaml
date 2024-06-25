@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openfeature-sample
+  labels:
+    app: openfeature-sample
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openfeature-sample
+  template:
+    metadata:
+      labels:
+        app: openfeature-sample
+      annotations:
+        # here are the annotations for OpenFeature Operator
+        openfeature.dev/enabled: "true"
+        openfeature.dev/featureflagsource: "flags/feature-flag-source"
+    spec:
+      containers:
+        - name: openfeature-sample
+          image: quay.io/devguyio/openfeature-sample:latest
+          ports:
+            - containerPort: 8888
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: openfeature-sample
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 8888
+  selector:
+    app: openfeature-sample
